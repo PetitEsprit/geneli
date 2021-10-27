@@ -1,83 +1,108 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/27 11:08:59 by mdankou           #+#    #+#             */
+/*   Updated: 2021/10/27 18:32:15 by mdankou          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "get_next_line.h"
-//#include <stdio.h>
 
-struct node
+t_list	*ft_lstnew(void *content);
+void	ft_lstclear(t_list **lst, void (*del)(void *));
+char	*ft_strchr(const char *s, int c);
+char	*ft_strndup(char const *src, int n);
+size_t	ft_strlen(const char *s);
+
+#include <stdio.h>
+void printc(void * c)
 {
-	char *data;
-	struct node* next;
-};
-
-int searchNL(char* str, int from);
-char *linedup(char *str, unsigned from, unsigned to);
-
-struct node* list_create(char *str)
-{
-	struct node* n = (struct node*)malloc(sizeof(struct node));
-	if(!n) return NULL;
-	n->data = str;
-	n->next = NULL;
-	return n;
+	printf("%s\n", (char *)c);
 }
 
-void list_free(struct node* n)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	if(!n) return;
-	if(n->next) list_free(n->next);
-	free(n->data);
-	free(n);
+	while (lst)
+	{
+		f(lst->content);
+		lst = lst->next;
+	}
 }
 
-int get_next_line(int fd, char **line)
+char	*build_string(t_list *l)
 {
-	if(fd == -1) return -1;
+	char	*dst;
+	t_list	*tmp;
+	size_t	j;
+	size_t	i;
 
-	static char buffer[BUFFER_SIZE] = {0};
-	static int nli = -1;
-	int oldnli = nli, lentotal = 0, ret;
+	i = 0;
+	tmp = l; 
+	while (tmp)
+	{
+		i += ft_strlen((char *)tmp->content);
+		tmp = tmp->next;
+	}
+	dst = (char *)malloc(sizeof(char) * (i + 1));
+	if (!dst)
+		return (NULL);
+	dst[i] = '\0';
+	i = 0;
+	while (l)
+	{
+		j = -1;
+		while (((char *)l->content)[++j])
+			dst[i + j] = ((char *)l->content)[j];
+		i+= j;
+		l = l->next;
+	}
+	return (dst);
+}
 
-	if(nli == -1)
+char	*get_next_line(int fd)
+{
+	static char	buffer[BUFFER_SIZE] = {0};
+	static char	*nlp = NULL;
+	t_list		*first;
+	t_list		*last;
+	int			ret;
+
+	if (nlp == 0)
 	{
 		ret = read(fd, buffer, BUFFER_SIZE);
-		//printf("buffer: %s\n", buffer);
-		if(!ret || ret == -1) { return ret;}
-		oldnli = 0;
+		if (ret <= 0)
+			return (NULL);
+		nlp = ft_strchr(buffer, '\n');
 	}
-
-	//printf("debut nli: %d\n", nli);
-
-	struct node *first, *curr = NULL;
-
-	nli = searchNL(buffer, nli);
-	if(nli == -1) curr = list_create(linedup(buffer, oldnli, ret)), lentotal = (ret - oldnli);
-	else curr = list_create(linedup(buffer, oldnli, nli)), lentotal = (nli - oldnli);
-	first = curr;
-
-	while(!(nli >= 0) && (ret = read(fd, buffer, BUFFER_SIZE)))
+	if (nlp == 0)
+		last = ft_lstnew(ft_strndup(buffer, BUFFER_SIZE));
+	else
+		last = ft_lstnew(ft_strndup(nlp, BUFFER_SIZE - (nlp - buffer)));
+	first = last;
+	nlp = 0;
+	ret = read(fd, buffer, BUFFER_SIZE);
+	while (!((intptr_t)nlp > 0) && ret)
 	{
-		if(ret == -1) { list_free(first); return -1;}
-		nli = searchNL(buffer, 0);
-		curr->next = list_create(linedup(buffer, 0, nli == -1 ? ret : nli));
-		lentotal += (nli ==-1 ? ret : nli);
-		curr = curr->next;
+		if (ret == -1)
+		{
+			ft_lstclear(&first, free);
+			return (NULL);
+		}
+		nlp = ft_strchr(buffer, '\n');
+		if (nlp == 0)
+			last->next = ft_lstnew(ft_strndup(buffer, ret));
+		else
+			last->next = ft_lstnew(ft_strndup(buffer, nlp - buffer + 1));
+		ret = read(fd, buffer, BUFFER_SIZE);
+		last = last->next;
 	}
-
-	//printf("nli: %d", nli);
-	char* result = (char*)malloc(sizeof(char)*(lentotal+1));
-	int j = 0, i;
-
-	if(!result) { list_free(first); return -1;}
-	for(curr = first; curr; curr = curr->next, j+=i)
-	{
-		for(i=0; curr->data[i] != '\0'; i++)
-			result[j+i] = curr->data[i];
-	}
-
-	//printf("fin nli: %d\n", nli);
-	result[j] = '\0';
-	*line = result;
-	list_free(first);
-	nli++; if(nli >= ret) nli = -1;
-	return 1;
+	//ft_lstiter(first, printc);
+	return (build_string(first));
 }

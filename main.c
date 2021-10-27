@@ -10,9 +10,11 @@ void test1()
 {
 	char *line = NULL;
 	int fd = open("test", O_RDONLY);
-	get_next_line(fd, &line);
-	printf("line: %s\n",line);
-	if(line) free(line);
+	line = get_next_line(fd);
+	printf("line: '%s'\n",line);
+	//line = get_next_line(fd);
+	if (line)
+		free(line);
 	close(fd);
 }
 
