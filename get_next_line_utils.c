@@ -6,38 +6,13 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/10/27 13:19:05 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/11/13 13:00:28 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "get_next_line.h"
 
-t_list	*ft_lstnew(void *content)
-{
-	t_list	*elm;
-
-	elm = (t_list *)malloc(sizeof(t_list));
-	if (!elm)
-		return (0);
-	elm->content = content;
-	elm->next = NULL;
-	return (elm);
-}
-
-void	ft_lstclear(t_list **lst, void (*del)(void *))
-{
-	t_list	*tmp;
-
-	tmp = *lst;
-	while (tmp)
-	{
-		del(tmp->content);
-		free(tmp);
-		tmp = tmp->next;
-	}
-	*lst = NULL;
-}
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -58,6 +33,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
+/*
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	i;
@@ -74,11 +50,19 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 		i++;
 	return (i);
 }
+*/
 
- char	*ft_strndup(char const *src, int n)
+char	*tern(char *cond, char *ift, char *iff)
 {
-	int		i;
-	char	*res;
+	if (cond)
+		return (ift);
+	return (iff);
+}
+
+char	*ft_strndup(char const *src, unsigned int n)
+{
+	unsigned int	i;
+	char			*res;
 
 	i = 0;
 	while (src[i] && i < n)
@@ -94,4 +78,27 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*dst;
+	size_t	i;
+	size_t	j;
+
+	i = ft_strlen(s1);
+	j = ft_strlen(s2);
+	if (i + j == 0)
+		return (NULL);
+	dst = (char *)malloc(sizeof(char) * (i + j + 1));
+	if (!dst)
+		return (NULL);
+	dst[i + j] = '\0';
+	j = -1;
+	i = -1;
+	while (s1[++i])
+		dst[i] = s1[i];
+	while (s2[++j])
+		dst[i + j] = s2[j];
+	return (dst);
 }

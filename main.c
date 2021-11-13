@@ -12,9 +12,10 @@ void test1()
 	int fd = open("test", O_RDONLY);
 	line = get_next_line(fd);
 	printf("line: '%s'\n",line);
-	//line = get_next_line(fd);
-	if (line)
-		free(line);
+	line = get_next_line(fd);
+	printf("line: '%s'\n",line);
+	line = get_next_line(fd);
+	printf("line: '%s'\n",line);
 	close(fd);
 }
 
