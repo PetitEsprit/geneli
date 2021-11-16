@@ -10,12 +10,16 @@ void test1()
 {
 	char *line = NULL;
 	int fd = open("test", O_RDONLY);
-	line = get_next_line(fd);
-	printf("line: '%s'\n",line);
-	line = get_next_line(fd);
-	printf("line: '%s'\n",line);
-	line = get_next_line(fd);
-	printf("line: '%s'\n",line);
+	if (fd == -1)
+	{
+		printf("ERROR fd\n");
+		return ;
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("line: '%s'\n",line);
+		free(line);
+	}
 	close(fd);
 }
 

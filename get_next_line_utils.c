@@ -6,13 +6,12 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/11/13 13:00:28 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/11/14 17:13:02 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "get_next_line.h"
-
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -31,32 +30,6 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
-}
-
-/*
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	while (src[i] && i + 1 < size)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (size > 0)
-		dst[i] = '\0';
-	while (src[i])
-		i++;
-	return (i);
-}
-*/
-
-char	*tern(char *cond, char *ift, char *iff)
-{
-	if (cond)
-		return (ift);
-	return (iff);
 }
 
 char	*ft_strndup(char const *src, unsigned int n)
@@ -101,4 +74,26 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[++j])
 		dst[i + j] = s2[j];
 	return (dst);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	size_t			i;
+	size_t			j;
+	unsigned char	*ptr;
+
+	if (!nmemb || !size)
+		return (0);
+	ptr = (unsigned char *)malloc(nmemb * size);
+	if (!ptr)
+		return (0);
+	j = 0;
+	while (j < nmemb)
+	{
+		i = 0;
+		while (i < size)
+			ptr[i++] = 0;
+		j++;
+	}
+	return (ptr);
 }
