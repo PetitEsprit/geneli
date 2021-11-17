@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:08:59 by mdankou           #+#    #+#             */
-/*   Updated: 2021/11/16 03:24:59 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/11/17 13:00:32 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,23 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-#include <stdint.h>
-#include <stdio.h>
-
+size_t	ft_strlen(const char *s);
 char	*ft_strndup(char const *src, unsigned int n);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_calloc(size_t nmemb, size_t size);
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2)
+	{
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		++s1;
+		++s2;
+	}
+	return (*s1 - *s2);
+}
 
 char	*first_step(int fd, char *buff, char **ptroldnlp, int *ret)
 {
@@ -59,8 +69,7 @@ char	*build_string(int fd, char *buff, char **ptroldnlp, int *ret)
 	char	*dup;
 
 	nlp = NULL;
-	dst = (char *)malloc(sizeof(char));
-	dst[0] = '\0';
+	dst = (char *)calloc(1, sizeof(char));
 	while (!(nlp) && *ret)
 	{
 		*ret = read(fd, buff, BUFFER_SIZE);
@@ -83,13 +92,12 @@ char	*build_string(int fd, char *buff, char **ptroldnlp, int *ret)
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE + 1] = {0}; // Variable length array A CHANGER !
+	static char	buff[BUFFER_SIZE + 1] = {0};
 	static char	*oldnlp = NULL;
 	static int	ret = 1;
 	char		*s[2];
 	char		*dst;
 
-	printf("buffer: '%s' ptrbuffer: %ld oldnlp: %ld\n", buff, (intptr_t)buff, (intptr_t)oldnlp);
 	s[0] = first_step(fd, buff, &oldnlp, &ret);
 	if (oldnlp || !s[0])
 		return (s[0]);

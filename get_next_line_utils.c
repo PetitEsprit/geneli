@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/11/14 17:13:02 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/11/17 12:53:52 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 	size_t	j;
 
+	if (s1 && !s2)
+		return (ft_strndup(s1, ft_strlen(s1)));
+	if (s2 && !s1)
+		return (ft_strndup(s2, ft_strlen(s2)));
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
 	if (i + j == 0)

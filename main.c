@@ -6,10 +6,13 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-void test1()
+void	test1(void)
 {
-	char *line = NULL;
-	int fd = open("test", O_RDONLY);
+	char	*line;
+	int		fd;
+
+	line = NULL;
+	fd = open("test", O_RDONLY);
 	if (fd == -1)
 	{
 		printf("ERROR fd\n");
@@ -17,14 +20,14 @@ void test1()
 	}
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		printf("line: '%s'\n",line);
+		printf("line: '%s'\n", line);
 		free(line);
 	}
 	close(fd);
 }
 
-int main()
+int	main(void)
 {
 	test1();
-	return 0;
+	return (0);
 }
