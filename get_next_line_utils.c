@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/11/17 12:53:52 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/07 22:21:40 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,26 +78,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[++j])
 		dst[i + j] = s2[j];
 	return (dst);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	size_t			i;
-	size_t			j;
-	unsigned char	*ptr;
-
-	if (!nmemb || !size)
-		return (0);
-	ptr = (unsigned char *)malloc(nmemb * size);
-	if (!ptr)
-		return (0);
-	j = 0;
-	while (j < nmemb)
-	{
-		i = 0;
-		while (i < size)
-			ptr[i++] = 0;
-		j++;
-	}
-	return (ptr);
 }

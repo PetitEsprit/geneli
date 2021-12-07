@@ -1,0 +1,4 @@
+Principal problème:
+	Patché à la va vite, pas très beau
+	-> bug: après un appel, oldnlp peut être set, first step est appelle et va dans 
+	le cas où oldnlp vaut qqchose, forcant un dup des fois de rien (dup: '').
