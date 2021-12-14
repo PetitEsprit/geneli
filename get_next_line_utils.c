@@ -6,21 +6,45 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/12/07 22:21:40 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:13:53 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "get_next_line.h"
+#include <stddef.h>
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	while (*s && *s != c)
-		s++;
-	if (*s != c)
-		return (0);
-	return ((char *)s);
+	size_t	i;
+	char	*dst;
+	char	*s;
+
+	if (!dest && !src)
+		return (NULL);
+	i = -1;
+	dst = (char *)dest;
+	s = (char *)src;
+	while (++i < n)
+		dst[i] = s[i];
+	return (dest);
 }
+
+size_t	search_endl(char *buffer)
+{
+	size_t	i;
+
+	if (buffer[0] == '\0' || buffer[0] == '\n')
+		return (0);
+	i = 1;
+	while (buffer[i])
+	{
+		if (buffer[i] == '\n')
+			return (i);
+		++i;
+	}
+	return (i - 1);
+}
+
 
 size_t	ft_strlen(const char *s)
 {
