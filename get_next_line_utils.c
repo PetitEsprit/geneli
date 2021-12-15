@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/12/14 17:13:53 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/15 14:42:43 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ size_t	ft_strlen(const char *s)
 {
 	unsigned int	i;
 
+	if (!s)
+		return (0);
 	i = 0;
 	while (s[i])
 		i++;
