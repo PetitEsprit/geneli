@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/12/15 14:42:43 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/17 16:36:33 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,27 +56,6 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
-}
-
-char	*ft_strndup(char const *src, unsigned int n)
-{
-	unsigned int	i;
-	char			*res;
-
-	i = 0;
-	while (src[i] && i < n)
-		i++;
-	res = (char *)malloc(sizeof(char) * (i + 1));
-	if (!res)
-		return (0);
-	i = 0;
-	while (src[i] && i < n)
-	{
-		res[i] = src[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
