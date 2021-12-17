@@ -6,7 +6,7 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:15:05 by mdankou           #+#    #+#             */
-/*   Updated: 2021/12/17 16:36:33 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/17 16:58:32 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,29 +58,24 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*extend_line(char *src, char *buffer, size_t end)
 {
 	char	*dst;
-	size_t	i;
-	size_t	j;
+	char	*tmp;
+	size_t	len;
 
-	if (s1 && !s2)
-		return (ft_strndup(s1, ft_strlen(s1)));
-	if (s2 && !s1)
-		return (ft_strndup(s2, ft_strlen(s2)));
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
-	if (i + j == 0)
-		return (NULL);
-	dst = (char *)malloc(sizeof(char) * (i + j + 1));
+	tmp = src;
+	len = ft_strlen(src);
+	dst = (char *)malloc(sizeof(char) * (len + end + 2));
 	if (!dst)
+	{
+		free(tmp);
 		return (NULL);
-	dst[i + j] = '\0';
-	j = -1;
-	i = -1;
-	while (s1[++i])
-		dst[i] = s1[i];
-	while (s2[++j])
-		dst[i + j] = s2[j];
+	}
+	dst[len + end + 1] = '\0';
+	ft_memcpy(dst, tmp, len);
+	ft_memcpy(dst + len, buffer, end + 1);
+	free(tmp);
+	ft_memcpy(buffer, buffer + end + 1, BUFFER_SIZE - end); //update buffer
 	return (dst);
 }
