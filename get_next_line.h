@@ -6,11 +6,13 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:09:31 by mdankou           #+#    #+#             */
-/*   Updated: 2021/11/14 15:30:35 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/20 11:16:46 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
 char	*get_next_line(int fd);
+
 #endif

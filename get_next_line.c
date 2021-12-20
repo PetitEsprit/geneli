@@ -6,48 +6,56 @@
 /*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 11:08:59 by mdankou           #+#    #+#             */
-/*   Updated: 2021/12/17 17:15:49 by mdankou          ###   ########.fr       */
+/*   Updated: 2021/12/20 11:11:48 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
 
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 size_t	search_endl(char *buffer);
 size_t	ft_strlen(const char *s);
-char	*extend_line(char *src, char *buffer, size_t end);
 
-void print_buffer(char *buff)
+char	*extend_line(char *src, char *buffer, int *nl_found)
 {
-	int i = 0;
-	while (i < BUFFER_SIZE + 1)
+	char	*dst;
+	char	*tmp;
+	size_t	len;
+	size_t	end;
+
+	tmp = src;
+	len = ft_strlen(src);
+	end = search_endl(buffer);
+	*nl_found = (buffer[end] == '\n');
+	dst = (char *)malloc(sizeof(char) * (len + end + 2));
+	if (!dst)
 	{
-		if (isprint(buff[i]))
-			printf("'%c'", buff[i]);
-		else
-			printf("'\\%d'", buff[i]);
-		++i;
+		free(tmp);
+		*nl_found = 1;
+		return (NULL);
 	}
-	printf("\n");
+	dst[len + end + 1] = '\0';
+	ft_memcpy(dst, tmp, len);
+	ft_memcpy(dst + len, buffer, end + 1);
+	free(tmp);
+	ft_memcpy(buffer, buffer + end + 1, BUFFER_SIZE - end);
+	return (dst);
 }
 
 char	*build_string(int fd, char *buffer)
 {
-	size_t	end;
 	char	*dst;
 	int		ret;
-	int		nl_find;
+	int		nl_found;
 
-	nl_find = 0; 
+	nl_found = 0;
 	dst = NULL;
-	while (!nl_find)
+	while (!nl_found)
 	{
 		if (!buffer[0])
 		{
-			ret = read(fd,  buffer, BUFFER_SIZE);
+			ret = read(fd, buffer, BUFFER_SIZE);
 			if (ret < 0)
 			{
 				free(dst);
@@ -57,11 +65,7 @@ char	*build_string(int fd, char *buffer)
 				return (dst);
 			buffer[ret] = '\0';
 		}
-		end = search_endl(buffer);
-		nl_find = (buffer[end] == '\n');
-		dst = extend_line(dst, buffer, end);
-		if (!dst)
-			break;
+		dst = extend_line(dst, buffer, &nl_found);
 	}
 	return (dst);
 }
